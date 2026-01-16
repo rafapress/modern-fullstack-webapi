@@ -1,0 +1,34 @@
+## [ Visual Studio ]
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.sln.docstates
+
+## [ .NET / C# ]
+*.exe
+*.dll
+*.pdb
+*.orig
+*.log
+.templateengine/
+# Seus segredos locais (Importante!)
+usersecrets.json
+appsettings.Development.json
+
+## [ SQL Server ]
+*.mdf
+*.ldf
+*.ndf
+
+## [ Node / Frontend ]
+node_modules/
+dist/
+build/
+.env
+.env.local
+
+## [ Outros ]
+.DS_Store
+Thumbs.db

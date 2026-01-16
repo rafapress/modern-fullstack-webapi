@@ -1,0 +1,6 @@
+@Press.WebApi_HostAddress = http://localhost:5209
+
+GET {{Press.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

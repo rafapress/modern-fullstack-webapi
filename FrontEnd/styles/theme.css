@@ -1,0 +1,199 @@
+body { 
+	background-color: #F4F7F6; 
+	font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.session-icon {
+	align-items: center;
+	border-radius: 50% !important;
+	display: flex;
+	flex-shrink: 0;
+	height: 45px;
+	justify-content: center;
+	width: 45px;
+}
+
+	.session-icon i {
+		font-size: 1.2rem;
+		line-height: 0;
+	}
+
+#overlay {
+	background: rgba(0, 0, 0, 0.7);
+	backdrop-filter: blur(2px);
+	height: 100%;
+	left: 0;
+	opacity: 0;
+	position: fixed;
+	top: 0;
+	transition: opacity 0.5s ease, visibility 0.5s;
+	visibility: hidden;
+	width: 100%;
+	z-index: 1040;
+}
+
+	#overlay.active {
+		opacity: 1;
+		visibility: visible;
+	}
+
+#drawerUsuario, #drawerPerfil {
+	background-color: #FFF;
+	height: 100%; 
+	overflow-y: auto;
+	position: fixed; 
+	top: 0; 
+	transition: right 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+	width: 500px; 
+}
+
+#drawerUsuario {
+	border-left: 5px solid #212529;
+	box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+	right: -550px; 
+	z-index: 1050;
+}
+
+#drawerPerfil {
+	border-left: 8px solid #212529;
+	box-shadow: -15px 0 35px rgba(0, 0, 0, 0.2);
+	right: -550px; 
+	z-index: 1060;
+}
+
+	#drawerUsuario.active, #drawerPerfil.active {
+		right: 0;
+	}
+
+.form-control {
+	border: 1px solid #CCC;
+	border-radius: 5px;
+	font-size: 16px;
+	padding: 12px 15px;
+}
+
+	.form-control:focus {
+		border-color: #212529;
+		box-shadow: 0 0 0 0.25rem rgba(33, 37, 41, 0.1);
+	}
+
+.italic {
+	font-style: italic;
+}
+
+.auth-card {
+	border-left: 5px solid #212529;
+}
+
+.table-container {
+	max-height: 500px;
+	overflow-y: auto;
+}
+
+.selectable-row {
+	cursor: pointer;
+	transition: background-color 1s ease;
+}
+
+	.selectable-row:hover {
+		background-color: #EEE !important;
+	}
+
+.selectable-row td {
+	background-color: transparent !important;
+	position: relative;
+	transition: background-color 1s ease;
+}
+
+.row-selected {
+	background-color: #EEE !important;
+	box-shadow: inset 5px 0 0 0 #212529 !important;
+}
+
+	.row-selected td:last-child::after {
+		background-color: #212529;
+		border-radius: 50%;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+		content: '';
+		height: 12px;
+		position: absolute;
+		right: 25px;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 12px;
+	}
+
+.crud-toolbar {
+	align-items: center;
+	display: flex;
+	flex-direction: row;
+	gap: 7px;
+}
+
+.crud-btn {
+	align-items: center;
+	border: none;
+	border-radius: 4px;
+	color: #FFF;
+	cursor: pointer;
+	display: inline-flex;
+	font-size: 16px;
+	height: 45px;
+	justify-content: center;
+	padding: 10px;
+	position: relative;
+	transition: background 0.3s;
+}
+
+	.crud-btn::before {
+		background-color: #000;
+		border-radius: 5px;
+		color: #FFD700;
+		content: attr(data-tooltip);
+		font-size: 13px;
+		font-weight: 600;
+		opacity: 0;
+		padding: 8px 15px;
+		position: absolute;
+		pointer-events: none;
+		right: 110%;
+		top: 50%;
+		transform: translateY(-50%) translateX(10px);
+		transition: all 0.3s ease;
+		white-space: nowrap;
+		z-index: 100;
+	}
+
+	.crud-btn:hover::before {
+		opacity: 1;
+		transform: translateY(-50%) translateX(0px);
+	}
+
+.btn-c { background-color: #212529; color: #FFF; }
+.btn-r { background-color: #2980B9; color: #FFF; }
+.btn-u { background-color: #F1C40F; color: #000; }
+.btn-d { background-color: #C0392B; color: #FFF; }
+
+	.btn-c:not(:disabled):hover { background-color: #219150; }
+	.btn-r:not(:disabled):hover { background-color: #2471A3; }
+	.btn-u:not(:disabled):hover { background-color: #D4AC0D; }
+	.btn-d:not(:disabled):hover { background-color: #A93226; }
+
+	.crud-btn:disabled {
+		background-color: #E0E0E0 !important;
+		border-color: #CCC !important;
+		color: #999 !important;
+		cursor: not-allowed;
+		filter: grayscale(1);
+		opacity: 0.8;
+	}
+
+@media (max-width: 550px) {
+
+	#drawerUsuario, #drawerPerfil { 
+		border-left: none; 
+		right: -100%; 
+		width: 100%; 
+	}
+
+}

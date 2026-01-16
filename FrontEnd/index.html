@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Front End | CRUD</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+	<link rel="stylesheet" href="styles/theme.css" />
+</head>
+<body>
+
+<div class="container mt-5">
+
+	<div class="d-flex justify-content-between align-items-center mb-4">
+		<div>
+			<h2 class="mb-0 fw-bold text-dark">Gerenciador de Usuários</h2>
+			<small class="text-muted text-uppercase fw-semibold" style="letter-spacing: 1px;">WebApi .NET 10 | C# 14</small>
+		</div>
+		<div class="d-flex gap-2">
+			<div id="statusCard" class="small fw-bold px-3 py-2 bg-white rounded shadow-sm border">
+				<span id="authStatus" class="text-muted">Aguardando Login...</span>
+			</div>
+			<div id="changePassCard" class="small fw-bold px-3 py-2 bg-white rounded shadow-sm border" style="display: none;">
+				<a href="javascript:void(0)" id="btnOpenPassModal" class="text-decoration-none text-dark">
+					<i class="bi bi-shield-lock text-primary me-2"></i>Alterar Senha
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="card auth-card mb-4 shadow-sm border-0">
+		<div class="card-body p-4">
+
+			<form id="formLogin">
+				<div class="row g-3 align-items-end">
+					<div id="colEmail" class="col-12 col-md-5">
+						<label class="form-label small fw-bold text-uppercase">E-mail</label>
+						<input type="email" id="loginEmail" class="form-control" placeholder="Informe seu e-mail de acesso" autocomplete="username">
+					</div>
+					<div id="colSenha" class="col-12 col-md-4">
+						<label class="form-label small fw-bold text-uppercase">Senha</label>
+						<input type="password" id="loginPassword" class="form-control" placeholder="Informe a senha" autocomplete="current-password">
+					</div>
+					<div id="colBtnLogin" class="col-12 col-md-3"> 
+						<button id="btnLogin" type="button" class="btn btn-dark w-100 py-3 shadow-sm">
+							<i class="bi bi-box-arrow-in-right me-2"></i>Acessar
+						</button>
+					</div>
+
+					<div id="userInfo" class="col-12 col-md-9 d-none">
+						<div class="d-flex align-items-center py-2 animate__animated animate__fadeIn">
+							<div class="session-icon bg-success text-white shadow-sm me-3">
+								<i class="bi bi-person-check-fill"></i>
+							</div>
+							<div>
+								<h6 class="mb-0 fw-bold text-uppercase text-dark">Sessão Ativa</h6>
+								<small class="text-muted">
+									Conectado como: <strong id="userNameDisplay" class="text-primary text-decoration-underline">...</strong>
+									<span id="userEmailDisplay" class="ms-1 italic text-lowercase"></span>
+								</small>
+							</div>
+						</div>
+					</div>
+					<div id="colBtnLogout" class="col-12 col-md-3 text-end d-none animate__animated animate__fadeIn">
+						<button id="btnLogout" type="button" class="btn btn-danger w-100 py-3 shadow-sm">
+							<i class="bi bi-power me-2"></i>Sair do Sistema
+						</button>
+					</div>
+				</div>
+			</form>
+
+		</div>
+	</div>
+
+	<div class="card shadow-sm border-0" style="border-radius: 12px;">
+		<div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+
+			<h5 class="mb-0 fw-bold text-dark">Base de Usuários</h5>
+
+			<div class="crud-toolbar">
+				<button id="ButtonCreate" class="crud-btn btn-c" data-tooltip="Novo usuário"><i class="bi bi-person-plus"></i>&nbsp;&nbsp;<strong>C</strong>&nbsp;</button>
+				<button id="ButtonRead"   class="crud-btn btn-r" data-tooltip="Atualizar lista"><i class="bi bi-arrow-clockwise"></i>&nbsp;&nbsp;<strong>R</strong>&nbsp;</button>
+				<button id="ButtonEdit"   class="crud-btn btn-u" data-tooltip="Editar selecionado"><i class="bi bi-pencil-square"></i>&nbsp;&nbsp;<strong>U</strong>&nbsp;</button>
+				<button id="ButtonDelete" class="crud-btn btn-d" data-tooltip="Excluir selecionado"><i class="bi bi-trash"></i>&nbsp;&nbsp;<strong>D</strong>&nbsp;</button>
+			</div>
+
+		</div>
+		<div class="card-body p-0">
+			<div id="mainOutput" class="table-container p-4">
+				<div class="text-center text-muted py-5">
+					<i class="bi bi-people fs-1 d-block mb-3 opacity-25"></i>
+					<p class="mb-0">Realize o login para listar os usuários e liberar os demais recursos do C&nbsp;<strong>R&nbsp;U&nbsp;D</strong>.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="overlay"></div>
+
+<div id="drawerUsuario" class="p-4">
+	<div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+		<div>
+			<h4 class="fw-bold mb-0" id="drawerTitle">Gerenciar Usuário</h4>
+			<small class="text-muted">Todos os campos são obrigatórios</small>
+		</div>
+		<button type="button" class="btn-close" id="btnCloseDrawer"></button>
+	</div>
+
+	<form id="formUsuario">
+
+		<input type="hidden" name="id" id="userIdField">
+
+		<div class="mb-4">
+			<label class="small fw-bold text-muted text-uppercase mb-2 d-block">Identificação</label>
+			<input type="text" name="name" class="form-control mb-2" placeholder="Nome Completo" required>
+			<input type="email" name="email" class="form-control mb-2" placeholder="E-mail" required>
+			<div class="row g-2">
+				<div class="col-6"><input type="text" name="cpf" id="maskCpf" class="form-control" placeholder="CPF"></div>
+				<div class="col-6"><input type="text" name="rg" class="form-control" placeholder="RG"></div>
+			</div>
+		</div>
+
+		<div class="mb-4">
+			<label class="small fw-bold text-muted text-uppercase mb-2 d-block">Endereço e Contato</label>
+			<input type="text" name="phone" id="maskPhone" class="form-control mb-2" placeholder="Telefone">
+			<input type="text" name="address" class="form-control mb-2" placeholder="Endereço">
+			<div class="row g-2 mb-2">
+				<div class="col-8"><input type="text" name="district" class="form-control" placeholder="Bairro"></div>
+				<div class="col-4"><input type="text" name="number" class="form-control" placeholder="Nº"></div>
+			</div>
+			<div class="row g-2">
+				<div class="col-9"><input type="text" name="city" class="form-control" placeholder="Cidade"></div>
+				<div class="col-3"><input type="text" name="fu" class="form-control" placeholder="UF" maxlength="2"></div>
+			</div>
+		</div>
+
+		<div class="mt-5">
+			<button type="submit" class="btn btn-dark w-100 py-3 fw-bold shadow">
+				<i class="bi bi-save me-2"></i>Salvar
+			</button>
+		</div>
+
+	</form>
+
+</div>
+
+<div id="drawerPerfil" class="p-4">
+
+	<div class="d-flex justify-content-between align-items-center mb-5 pb-2 border-bottom">
+		<div>
+			<h4 class="fw-bold mb-0">MEU PERFIL</h4>
+			<small class="text-muted text-uppercase" style="font-size: 10px;">Segurança da conta</small>
+		</div>
+		<button type="button" class="btn-close" id="btnClosePerfil"></button>
+	</div>
+
+	<form id="formSenha">
+
+		<h6 class="fw-bold small text-muted text-uppercase mb-3">Alterar senha de acesso</h6>
+
+		<div class="mb-3">
+			<label class="form-label small fw-bold">Senha atual</label>
+			<input type="password" id="currentPass" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+		</div>
+
+		<div class="mb-3">
+			<label class="form-label small fw-bold">Nova senha</label>
+			<input type="password" id="newPassword" class="form-control" placeholder="Mínimo 6 caracteres" required autocomplete="new-password">
+		</div>
+		<div class="mb-4">
+			<label class="form-label small fw-bold">Confirmar nova senha</label>
+			<input type="password" id="confirmPass" class="form-control" placeholder="Repita a nova senha" required autocomplete="new-password">
+		</div>
+
+		<button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-1 shadow">
+			<i class="bi bi-shield-lock me-2"></i>Salvar
+		</button>
+
+	</form>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vanilla-masker@1.1.1/build/vanilla-masker.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="scripts/config.js"></script>
+<script src="scripts/app.js"></script>
+
+</body>
+</html>
